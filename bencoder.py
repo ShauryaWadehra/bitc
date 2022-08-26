@@ -1,6 +1,9 @@
 from collections import OrderedDict
 
-
+"""
+The b'...' notation allows the bytes to be specified with ASCII 
+characters instead of hex numbers.
+"""
 START_INT = b'i'
 
 START_LIST = b'l'
@@ -13,10 +16,20 @@ TOKEN_END = b'e'
 
 
 class Encoder:
+    """
+    for int -> 4 -> 'i4e'
+    for string -> hello -> '5:hello'
+    for list -> 'l(encode each item)e'
+    for dict -> 'd(for each (encode key,encode value))e'
+    """
     def __init__(self, data):
         self._data = data
 
-    def encode_(self, data):
+    def encode(self) -> bytes:
+       
+        return self.encode_next(self._data)
+
+    def encode_next(self, data):
         if type(data) == str:
             return self._encode_string(data)
         elif type(data) == int:
@@ -45,8 +58,8 @@ class Encoder:
     def _encode_dict(self, data: dict) -> bytes:
         result = bytearray('d', 'utf-8')
         for k, v in data.items():
-            key = self.encode_(k)
-            value = self.encode_(v)
+            key = self.encode(k)
+            value = self.encode(v)
             if key and value:
                 result += key
                 result += value
@@ -69,13 +82,13 @@ class Decoder:
         if c is None:
             raise EOFError('Unexpected end-of-file')
         elif c == START_INT:
-            self._consume()  # The token
+            self._consume()  
             return self._decode_int()
         elif c == START_LIST:
-            self._consume()  # The token
+            self._consume()  
             return self._decode_list()
         elif c == START_DICT:
-            self._consume()  # The token
+            self._consume()  
             return self._decode_dict()
         elif c == TOKEN_END:
             return None
