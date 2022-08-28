@@ -57,7 +57,7 @@ class Torrent:
         length in bytes for each piece
         """
         return self.meta_info[b'info'][b'piece length']
-
+    
     @property
     def total_size(self) -> int:
         """
