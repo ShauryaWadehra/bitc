@@ -1,1 +1,2 @@
-bittorrent client in python(in progress)
+# bitC
+Custom BitTorrent Clien
