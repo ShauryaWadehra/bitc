@@ -1,2 +1,2 @@
 # bitC
-Custom BitTorrent Clien
+Custom BitTorrent Client
